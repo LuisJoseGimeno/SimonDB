@@ -20,7 +20,7 @@
     import com.example.simon.databinding.SaveScoreBinding
     import kotlin.math.log
     import kotlin.random.Random
-
+    import android.view.animation.AnimationUtils
     data class Player(val name: String, val score: Int)
 
 
@@ -42,7 +42,6 @@
         private var isClickEnabled = true
         private val clickDelayMillis: Long = 1000
         private var gameStart = false
-
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
             binding = ActivityMainBinding.inflate(layoutInflater)
@@ -69,6 +68,7 @@
             binding.boardIcon.setOnClickListener {
                 showScoreBoardDialog()
             }
+
         }
         override fun surfaceCreated(holder: SurfaceHolder) {
             drawCanvas(holder)
@@ -178,6 +178,7 @@
                     startGame()
                 }else{
                     binding.Title.text = "Play"
+                    binding.Title.clearAnimation()
                     saveSettings();
                 }
 
@@ -228,21 +229,24 @@
                 gameRandomList.add(Random.nextInt(4))
             }
         }
-        private fun startGame(){
-            if(!gameStart){
+        private fun startGame() {
+            if (!gameStart) {
                 return
             }
-            createGameArray();
-            gameSequence = 1;
-            playerSequence = 0;
-            playArray();
+            binding.Title.startAnimation(AnimationUtils.loadAnimation(this, R.anim.simon_rotate))
+            createGameArray()
+            gameSequence = 1
+            playerSequence = 0
+            playArray()
         }
-        private fun loseGame(){
+        private fun loseGame() {
+            gameStart = false
+            binding.Title.clearAnimation()
+
             binding.Score.text = "Lose"
             binding.Title.text = "Play"
             saveSettings()
             isClickEnabled = true
-            gameStart = false
         }
         private fun saveSettings() {
             val builder = AlertDialog.Builder(this)
