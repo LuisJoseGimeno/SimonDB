@@ -234,6 +234,7 @@
             }
             createGameArray();
             gameSequence = 1;
+            playerSequence = 0;
             playArray();
         }
         private fun loseGame(){
